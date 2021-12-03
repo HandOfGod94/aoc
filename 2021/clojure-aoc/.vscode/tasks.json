@@ -1,12 +1,55 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "lein $currentfile",
-			"type": "shell",
-			"command": "lein test ${relativeFile}"
-		}
-	]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "lein uberjar",
+      "detail": "build uber jar",
+      "type": "shell",
+      "command": "lein uberjar",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "lein test",
+      "detail": "run all the tests",
+      "type": "shell",
+      "command": "lein test",
+      "group": "test"
+    },
+    {
+      "label": "lein test $currentfile",
+      "detail": "run all the tests in current file",
+      "type": "shell",
+      "command": "lein test ${relativeFile}",
+      "group": "test"
+    },
+    {
+      "label": "lein test $selected",
+      "detail": "run only selected test",
+      "type": "shell",
+      "command": "cat ${relativeFile} | head -n +1 | cut -c5- | xargs -I @ lein test :only @/${selectedText}",
+      "group": "test"
+    },
+    {
+      "label": "lein test interactive",
+      "detail": "select tests to run",
+      "type": "shell",
+      "command": "cat ${relativeFile} | head -n +1 | cut -c5- | xargs -I @ lein test :only @/${input:testname}",
+      "group": "test"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "testname",
+      "type": "command",
+      "command": "shellCommand.execute",
+      "args": {
+        "command": "cat ${file} | sed -n 's/(deftest\\ \\(.*\\)/\\1/p'"
+      }
+    }
+  ]
 }
