@@ -14,7 +14,7 @@
 
 (deftest dive-test
   (testing "with sample input"
-    (is (= 150 (dive/final-coord [[:forward 5]
+    (is (= 900 (dive/final-coord [[:forward 5]
                                   [:down 5]
                                   [:forward 8]
                                   [:up 3]
@@ -22,4 +22,4 @@
                                   [:forward 2]]))))
   (testing "with my input"
     (with-open [rdr (io/reader "test/clojure_aoc/dive-testdata.txt")]
-      (is (= 1746616 (dive/final-coord (dive/parse-input (line-seq rdr))))))))
+      (is (= 1741971043 (dive/final-coord (dive/parse-input (line-seq rdr))))))))

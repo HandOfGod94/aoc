@@ -2,18 +2,18 @@
   (:require [clojure.string :as str]
             [clojure.core.match :refer [match]]))
 
-(defn- coord-product [final-coord]
-  (* (first final-coord) (second final-coord)))
+(defn- coord-product [[x y _]]
+  (* x y))
 
 (defn final-coord [commands]
   (->> commands
-       (reduce (fn [[curr-x curr-y] command]
+       (reduce (fn [[curr-x curr-y aim] command]
                  (match command
-                   [:forward x] [(+ curr-x x) curr-y]
-                   [:down y] [curr-x (+ curr-y y)]
-                   [:up y] [curr-x (- curr-y y)]
-                   :else [curr-x curr-y]))
-               [0 0])
+                   [:forward x] [(+ curr-x x) (+ (* aim x) curr-y) aim]
+                   [:down x] [curr-x curr-y (+ aim x)]
+                   [:up x] [curr-x curr-y (- aim x)]
+                   :else [curr-x curr-y aim]))
+               [0 0 0])
        (coord-product)))
 
 (defn parse-line [line]
