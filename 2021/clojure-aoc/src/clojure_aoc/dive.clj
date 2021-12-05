@@ -5,14 +5,14 @@
 (defn- coord-product [final-coord]
   (* (first final-coord) (second final-coord)))
 
-(defn final-coord [inputs]
-  (->> inputs
-       (reduce (fn [position command]
+(defn final-coord [commands]
+  (->> commands
+       (reduce (fn [[curr-x curr-y] command]
                  (match command
-                   [:forward x] [(+ (first position) x) (second position)]
-                   [:down y] [(first position) (+ (second position) y)]
-                   [:up y] [(first position) (- (second position) y)]
-                   :else position))
+                   [:forward x] [(+ curr-x x) curr-y]
+                   [:down y] [curr-x (+ curr-y y)]
+                   [:up y] [curr-x (- curr-y y)]
+                   :else [curr-x curr-y]))
                [0 0])
        (coord-product)))
 
